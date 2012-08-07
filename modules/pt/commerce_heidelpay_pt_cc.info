@@ -1,6 +1,0 @@
-name = Heidelpay PT (Credit Card)
-description = Implements Heidelpay Post-Transactions payment service for use with Drupal Commerce.
-package = Commerce (Heidelpay)
-dependencies[] = commerce_heidelpay
-dependencies[] = commerce_heidelpay_pt
-core = "7.x"

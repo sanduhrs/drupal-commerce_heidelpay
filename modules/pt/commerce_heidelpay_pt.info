@@ -3,3 +3,6 @@ description = Implements Heidelpay Post-Transactions payment service for use wit
 package = Commerce (Heidelpay)
 dependencies[] = commerce_heidelpay
 core = "7.x"
+
+; Still in development, not yet usable
+hidden = TRUE

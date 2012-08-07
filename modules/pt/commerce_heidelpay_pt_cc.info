@@ -4,3 +4,6 @@ package = Commerce (Heidelpay)
 dependencies[] = commerce_heidelpay
 dependencies[] = commerce_heidelpay_pt
 core = "7.x"
+
+; Still in development, not yet usable
+hidden = TRUE

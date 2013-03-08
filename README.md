@@ -1,6 +1,6 @@
 Drupal Commerce Heidelpay Module
 ========================================
-http://drupal.org/project/Commerce Heidelpay
+http://drupal.org/project/commerce_heidelpay
 
 
 ## Description

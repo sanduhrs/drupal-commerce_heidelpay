@@ -143,10 +143,10 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
 
   // Return an error if the enabling action's settings haven't been configured.
   if ($settings['mode'] === 'live' &&
-     (!empty($settings['login']) &&
-      !empty($settings['sender']) &&
-      !empty($settings['password']) &&
-      !empty($settings['channel']))) {
+     (empty($settings['login']) ||
+      empty($settings['sender']) ||
+      empty($settings['password']) ||
+      empty($settings['channel']))) {
     drupal_set_message(t('Heidelpay is not configured for use. Please provide the settings for the Heidelpay account.'), 'error');
     return array();
   }

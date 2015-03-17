@@ -35,12 +35,50 @@ function commerce_heidelpay_hco_commerce_payment_method_info() {
     'base' => 'commerce_heidelpay_hco',
     'title' => t('Heidelpay CheckOut'),
     'display_title' => $display_title,
-    'description' => t('Heidelpay CheckOut payment provider.'),
+    'description' => t('Heidelpay CheckOut - no payment method preselected.'),
     'terminal' => FALSE,
     'offsite' => TRUE,
     'offsite_autoredirect' => TRUE,
   );
 
+  foreach (commerce_heidelpay_payment_submethods() as $method => $submethods) {
+    $method_label = commerce_heidelpay_payment_methods($method);
+    // Always add dummy entry to select method without submethod.
+    array_unshift($submethods, array('' => ''));
+    foreach ($submethods as $submethod => $submethod_label) {
+      // Note that $method_label and $submethod_label are already translated and sanitized.
+      $t_options = array('context' => 'commerce_heidelpay');
+      if ($submethod) {
+        $payment_method_id = strtolower("{$method}_{$submethod}");
+        $submethod_lower = strtolower($submethod);
+        $icon = isset($icons[$submethod_lower]) ? $icons[$submethod_lower] : '';
+        $t_args = array(
+          '@method' => $method_label,
+          '@submethod' => $submethod_label,
+          '!icon' => $icon,
+        );
+        $payment_method_label = t('@method / @submethod', $t_args, $t_options);
+        $display_title = t('@submethod !icon', $t_args, $t_options);
+      }
+      else {
+        $payment_method_id = strtolower($method);
+        $payment_method_label = $method_label;
+        $t_args = array('@method' => $method_label);
+        $display_title = t('@method via Heidelpay', $t_args, $t_options);
+      }
+      $payment_methods["heidelpay_hco_$payment_method_id"] = array(
+        'base' => 'commerce_heidelpay_hco',
+        'title' => t('Heidelpay CheckOut: @method', array('@method' => $payment_method_label)),
+        'display_title' => $display_title,
+        'description' => t('Heidelpay CheckOut - preselected payment method .'),
+        'terminal' => FALSE,
+        'offsite' => TRUE,
+        'offsite_autoredirect' => TRUE,
+        'method' => $method,
+        'submethod' => $submethod,
+      );
+    }
+  }
   return $payment_methods;
 }
 
@@ -189,7 +227,7 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     'PAYMENT.CODE' => "CC.DB",
     // Presentation Group
     // @see heidelpay-Developer_guide_POST-Transactions_en.pdf page 16
-    'PRESENTATION.AMOUNT' => round(commerce_currency_amount_to_decimal($amount, $currency_code), 2),
+    'PRESENTATION.AMOUNT' => number_format(commerce_currency_amount_to_decimal($amount, $currency_code), $decimals),
     'PRESENTATION.CURRENCY' => $currency_code,
     'PRESENTATION.USAGE' => t('Order @order_number at @store', array(
       '@order_number' => $order->order_number,
@@ -218,6 +256,16 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     'FRONTEND.ENABLED' => "true",
     'FRONTEND.RESPONSE_URL' => url('checkout/heidelpay/' . $order->order_id . '/redirect/' . $order->data['payment_redirect_key'], array('absolute' => TRUE)),
   );
+
+  // Preselected payment methods
+  if (!empty($payment_method['method'])) {
+    $parameters['FRONTEND.PM.DEFAULT_DISABLE_ALL'] = 'true';
+    $parameters['FRONTEND.PM.1.METHOD'] = $payment_method['method'];
+    $parameters['FRONTEND.PM.1.ENABLED'] = 'true';
+    if (!empty($payment_method['submethod'])) {
+      $parameters['FRONTEND.PM.1.SUBTYPES'] = $payment_method['submethod'];
+    }
+  }
 
   // Authorization
   $response = drupal_http_request(

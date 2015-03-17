@@ -61,7 +61,7 @@ function commerce_heidelpay_settings($setting, $mode, $live_settings) {
     'mode' => 'CONNECTOR_TEST',
   ) + $settings['integrator_test'];
   $settings['live'] = array(
-    'url' => 'https://heidelpay.hpcgw.net/sgw/gtw',
+    'url' => 'https://heidelpay.hpcgw.net/sgw/gtwu',
     'mode' => 'LIVE',
   ) + $live_settings;
   return $settings[$mode][$setting];

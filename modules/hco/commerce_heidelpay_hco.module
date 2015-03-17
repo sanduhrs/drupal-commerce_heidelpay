@@ -269,10 +269,10 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
 
   // CSS & JS
   if ($css_path = variable_get('commerce_heidelpay_css_path')) {
-    $parameters['FRONTEND.CSS_PATH'] = $css_path;
+    $parameters['FRONTEND.CSS_PATH'] = url($css_path, array('absolute' => TRUE));
   }
   if ($js_path = variable_get('commerce_heidelpay_js_path')) {
-    $parameters['FRONTEND.JSCRIPT_PATH'] = $js_path;
+    $parameters['FRONTEND.JSCRIPT_PATH'] = url($js_path, array('absolute' => TRUE));
   }
 
   // Authorization

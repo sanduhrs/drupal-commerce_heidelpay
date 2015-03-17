@@ -160,6 +160,9 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     $billing_address['last_name'] = implode(' ', $name_parts);
   }
 
+  $currency = commerce_currency_load($currency_code);
+  $decimals = $currency['decimals'];
+
   $parameters = array(
     // Header Group
     // @see heidelpay-Developer_guide_POST-Transactions_en.pdf page 11

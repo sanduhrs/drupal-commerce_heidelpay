@@ -267,6 +267,14 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     }
   }
 
+  // CSS & JS
+  if ($css_path = variable_get('commerce_heidelpay_css_path')) {
+    $parameters['FRONTEND.CSS_PATH'] = $css_path;
+  }
+  if ($js_path = variable_get('commerce_heidelpay_js_path')) {
+    $parameters['FRONTEND.JSCRIPT_PATH'] = $js_path;
+  }
+
   // Authorization
   $response = drupal_http_request(
     $url,

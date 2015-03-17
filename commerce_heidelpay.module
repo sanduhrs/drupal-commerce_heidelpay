@@ -21,7 +21,7 @@ function commerce_heidelpay_icons() {
 
   $payment_methods = array(
     'visa' => t('Visa'),
-    'mastercard' => t('Mastercard'),
+    'master' => t('Mastercard'),
     'amex' => t('American Express'),
     'discover' => t('Discover'),
     'echeck' => t('eCheck'),

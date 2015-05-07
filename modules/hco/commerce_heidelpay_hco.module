@@ -222,9 +222,6 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     'IDENTIFICATION.TRANSACTIONID' => $order->order_number,
     'IDENTIFICATION.SHOPPERID' => $order->uid,
 
-    // Payment Group
-    // @see heidelpay-Developer_guide_POST-Transactions_en.pdf page 15
-    'PAYMENT.CODE' => "CC.DB",
     // Presentation Group
     // @see heidelpay-Developer_guide_POST-Transactions_en.pdf page 16
     'PRESENTATION.AMOUNT' => number_format(commerce_currency_amount_to_decimal($amount, $currency_code), $decimals),
@@ -267,7 +264,11 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     }
   }
 
-  // CSS & JS
+  // Payment Group
+  // @see heidelpay-Developer_guide_POST-Transactions_en.pdf page 15
+  $parameters['PAYMENT.CODE'] = commerce_heidelpay_payment_code($payment_method);
+
+  // CSS & JS{}
   if ($css_path = variable_get('commerce_heidelpay_css_path')) {
     $parameters['FRONTEND.CSS_PATH'] = url($css_path, array('absolute' => TRUE));
   }

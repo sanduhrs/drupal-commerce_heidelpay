@@ -96,6 +96,36 @@ function commerce_heidelpay_payment_methods($method = NULL) {
 }
 
 /**
+ * Payment methods: has debit?
+ */
+function commerce_heidelpay_payment_method_has_debit($method = NULL) {
+  $methods = array(
+    'VA' => TRUE,
+    'PP' => FALSE,
+    'CC' => TRUE,
+    'OT' => TRUE,
+    'DC' => TRUE,
+    'DD' => TRUE,
+    'IV' => FALSE,
+  );
+  return $method ? $methods[$method] : $methods;
+}
+
+/**
+ * @param $payment_method
+ * @return string
+ */
+function commerce_heidelpay_payment_code($payment_method) {
+  if (!empty($payment_method['method'])) {
+    return $payment_method['method'] .
+    commerce_heidelpay_payment_method_has_debit($payment_method['method']) ? '.DB' : '.PA';
+  }
+  else {
+    return 'CC.DB';
+  }
+}
+
+/**
  * Payment submethods
  */
 function commerce_heidelpay_payment_submethods($method = NULL) {

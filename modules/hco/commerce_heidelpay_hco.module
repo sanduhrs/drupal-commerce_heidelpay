@@ -261,6 +261,11 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
     $parameters['FRONTEND.PM.1.ENABLED'] = 'true';
     if (!empty($payment_method['submethod'])) {
       $parameters['FRONTEND.PM.1.SUBTYPES'] = $payment_method['submethod'];
+
+      // Paypal fix
+      if ($payment_method['submethod'] === 'PAYPAL') {
+        $parameters['ACCOUNT.BRAND'] = "PAYPAL";
+      }
     }
   }
 

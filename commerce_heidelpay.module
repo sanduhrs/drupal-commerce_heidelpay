@@ -118,7 +118,7 @@ function commerce_heidelpay_payment_method_has_debit($method = NULL) {
 function commerce_heidelpay_payment_code($payment_method) {
   if (!empty($payment_method['method'])) {
     return $payment_method['method'] .
-    commerce_heidelpay_payment_method_has_debit($payment_method['method']) ? '.DB' : '.PA';
+    (commerce_heidelpay_payment_method_has_debit($payment_method['method']) ? '.DB' : '.PA');
   }
   else {
     return 'CC.DB';

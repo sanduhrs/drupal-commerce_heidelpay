@@ -38,7 +38,8 @@ function commerce_heidelpay_icons() {
         'class' => array('commerce-heidelpay-icon'),
       ),
     );
-    $icons[$name] = theme('image', $variables);
+    // Do not use theme layer abstraction to prevent recursion.
+    $icons[$name] = theme_image($variables);
   }
 
   return $icons;

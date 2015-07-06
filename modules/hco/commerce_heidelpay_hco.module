@@ -282,6 +282,8 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
   }
 
   // Authorization
+  $query = http_build_query($parameters);
+  watchdog('heidelpay', 'Query: !query', array('!query' => check_plain(print_r($query, 1))));
   $response = drupal_http_request(
     $url,
     array(
@@ -290,7 +292,7 @@ function commerce_heidelpay_hco_redirect_form($form, &$form_state, $order, $paym
         'Content-Type' => 'application/x-www-form-urlencoded;charset=UTF-8',
       ),
       'method' => 'POST',
-      'data' => http_build_query($parameters),
+      'data' => $query,
     )
   );
 
